@@ -1,33 +1,22 @@
 const fs = require("fs");
 const Pool = require("pg").Pool;
 const fastcsv = require("fast-csv");
+var csv = require('csv-parser')
+var data = []
 
-let stream = fs.createReadStream("externl.csv");
-let csvData = [];
-let csvStream = fastcsv
-  .parse()
-  .on("data", function(data) {
-    csvData.push(data);
+fs.createReadStream('5m Sales Records.csv')
+  .pipe(csv())
+  .on('data', function (row) {
+    data.push(row)
   })
-  .on("end", function() {
-    // remove the first line: header
-    csvData.shift();
-
-    // create a new connection to the database
-    const pool = new Pool({
-        user: 'postgres',
-        host: 'localhost',
-        database: 'api',
-        password: '123bh@vy@456',
-        port: 5432,
-      });
-    
-    
-    
+  .on('end', function () {
+    console.log('Data loaded')
 
     const query =
-      "INSERT INTO userss (id, name, email) VALUES ($1, $2, $3)";
+      "INSERT INTO userss (Region ,Country , Itemtype,Sales ,OrderPrice ,OrderDate ,OrderId ,ShipDate ,UnitsSold ,  UnitPrice ,UnitCost ,TotalRevenue ,TotalCost ,TotalProfit ) VALUES ($1, $2, $3,$4,$5 ,$6 ,$7 ,$8 ,$9,$10,$11 ,$12 ,$13 ,$14)";
+      
 
+      
     pool.connect((err, client, done) => {
     //   if (err) throw err;
 
@@ -46,5 +35,3 @@ let csvStream = fastcsv
       }
     });
   });
-
-stream.pipe(csvStream);
