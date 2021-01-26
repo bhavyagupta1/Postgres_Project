@@ -16,11 +16,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/userss', db.getUsers)
-app.get('/userss/:id', db.getUserById)
-app.post('/userss', db.createUser)
-app.put('/userss/:id', db.updateUser)
-app.delete('/userss/:id', db.deleteUser)
-
+app.get('/userss/:Region', db.getUserById)
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
